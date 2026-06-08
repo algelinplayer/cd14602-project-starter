@@ -148,3 +148,80 @@ Requirements:
 - Use seed parameter for deterministic testing
 - Descriptive test names with type hints
 ```
+
+---
+
+## Prompt 6: Terminal UI Module
+
+```
+Create a `ui.py` module that handles all terminal interaction for the Flashcard Quizzer.
+
+Architecture:
+1. Define a `UIProtocol` using Python's `typing.Protocol` for dependency inversion.
+   Methods: display_welcome, display_card, get_answer, display_correct,
+   display_incorrect, display_stats, display_message, display_error.
+
+2. Implement a `TerminalUI` class that fulfills the protocol.
+   - Use consistent separators for visual clarity
+   - Handle EOFError and KeyboardInterrupt in get_answer (return empty string)
+   - display_stats shows: Total Questions, Correct, Incorrect, Accuracy %, Missed Terms
+
+Requirements:
+- All methods must have type hints and docstrings
+- Follow PEP 8 style guidelines
+- No external dependencies
+```
+
+---
+
+## Prompt 7: Quiz Engine (Core Logic)
+
+```
+Create a `quiz_engine.py` module that orchestrates a flashcard quiz session.
+
+Architecture:
+1. `SessionStats` dataclass:
+   - total_questions: int
+   - correct_count: int
+   - missed_terms: List[str]
+   - Properties: incorrect_count, accuracy (handles division by zero)
+
+2. `QuizEngine` class:
+   - Constructor accepts: Deck, QuizStrategy, UIProtocol (dependency injection)
+   - `run()` method: initializes strategy, displays welcome, runs quiz loop,
+     displays stats, returns SessionStats
+   - Track missed terms without duplicates
+   - Derive mode name from strategy class name
+
+Requirements:
+- Clean separation of concerns (engine does not do I/O directly)
+- All functions must have type hints and docstrings
+- Follow PEP 8 style guidelines
+```
+
+---
+
+## Prompt 8: Unit Tests for Quiz Engine
+
+```
+Write a pytest test suite for the quiz_engine module.
+
+Create a MockUI class that:
+- Records all method calls for verification
+- Returns predetermined answers from a list
+- Implements the UIProtocol interface
+
+Test classes needed:
+1. TestSessionStats: initial state, accuracy calculation, edge cases
+2. TestQuizEngineAllCorrect: 100% accuracy, welcome/stats displayed
+3. TestQuizEngineAllIncorrect: 0% accuracy, missed terms tracked
+4. TestQuizEngineMixedAnswers: partial accuracy, case-insensitive matching
+5. TestQuizEngineWithRandomStrategy: all cards presented
+6. TestQuizEngineWithAdaptiveStrategy: missed cards repeated, no repeat if all correct
+7. TestQuizEngineEdgeCases: empty answers, whitespace, mode detection, no duplicate missed
+
+Requirements:
+- Use SequentialStrategy for predictable ordering in most tests
+- Account for shuffled order when testing with AdaptiveStrategy/RandomStrategy
+- Descriptive test names with type hints
+```

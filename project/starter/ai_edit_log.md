@@ -112,3 +112,68 @@ The AI generated `test_quiz_modes.py` with four test classes and 28 test methods
 - Well-organized with descriptive test names.
 
 **Decision:** ACCEPTED after one test fix (described above in Interaction 4).
+
+---
+
+## Interaction 6: Terminal UI Module
+
+**Date:** 2026-06-08
+
+**Prompt Used:**
+> "Create a `ui.py` module that handles all terminal interaction for the Flashcard Quizzer. Define a `UIProtocol` using Python's `typing.Protocol` to decouple the UI from the engine (for testability). Then implement a `TerminalUI` class with methods: `display_welcome`, `display_card`, `get_answer`, `display_correct`, `display_incorrect`, `display_stats`, `display_message`, `display_error`. Use clean formatting with separators. Handle EOFError and KeyboardInterrupt in get_answer."
+
+**AI Response Summary:**
+The AI generated `ui.py` with a Protocol class and a concrete TerminalUI implementation.
+
+**Review Findings:**
+- Clean separation using Protocol for dependency inversion.
+- All methods have type hints and docstrings.
+- Graceful handling of EOFError/KeyboardInterrupt in get_answer.
+- Consistent formatting with separator constants.
+- Stats display includes accuracy percentage and missed terms list.
+
+**Decision:** ACCEPTED without modification.
+
+---
+
+## Interaction 7: Quiz Engine (Core Logic)
+
+**Date:** 2026-06-08
+
+**Prompt Used:**
+> "Create a `quiz_engine.py` module that orchestrates a quiz session. It should: (1) Accept a Deck, a QuizStrategy, and a UIProtocol as dependencies. (2) Define a `SessionStats` dataclass tracking total_questions, correct_count, and missed_terms with computed accuracy property. (3) Implement a `QuizEngine` class with a `run()` method that initializes the strategy, runs the question-answer loop, and displays results. (4) Track missed terms without duplicates. Use type hints and docstrings."
+
+**AI Response Summary:**
+The AI generated `quiz_engine.py` with SessionStats and QuizEngine classes.
+
+**Review Findings:**
+- Clean dependency injection pattern (deck, strategy, ui passed to constructor).
+- SessionStats correctly computes accuracy and handles division by zero.
+- The quiz loop correctly delegates card selection to the strategy.
+- Missed terms are tracked without duplicates using `not in` check.
+- Mode name is automatically derived from the strategy class name.
+
+**Decision:** ACCEPTED without modification.
+
+---
+
+## Interaction 8: Unit Tests for Quiz Engine
+
+**Date:** 2026-06-08
+
+**Prompt Used:**
+> "Write a pytest test suite for the quiz_engine module. Create a MockUI class that records all method calls and returns predetermined answers. Test scenarios: all correct, all incorrect, mixed answers, case-insensitive matching, adaptive mode with repeats, empty answers, whitespace handling, mode name detection, and no duplicate missed terms. Use SequentialStrategy for predictable ordering in most tests."
+
+**AI Response Summary:**
+The AI generated `test_quiz_engine.py` with a MockUI class and 23 test methods across 7 test classes.
+
+**Review Findings:**
+- MockUI correctly implements the UIProtocol interface for testing.
+- Tests cover all major scenarios including edge cases.
+- Uses SequentialStrategy for predictable card ordering in most tests.
+- Adaptive strategy tests correctly account for shuffled card order.
+
+**Issues Found and Fixed:**
+- One test (`test_no_repeat_if_all_correct`) provided answers in the wrong order for the AdaptiveStrategy with seed=42. The adaptive mode shuffles cards, so with seed=42 the order is Q2, Q1 (not Q1, Q2). Fixed by providing answers matching the shuffled order.
+
+**Decision:** ACCEPTED after fixing the answer order in one adaptive test.
