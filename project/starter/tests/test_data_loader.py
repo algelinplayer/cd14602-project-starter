@@ -203,10 +203,10 @@ class TestLoadDeckFromJson:
             assert deck.size == 10
             assert deck.cards[0].front == "What does API stand for?"
 
-    def test_directory_path_raises_error(self) -> None:
+    def test_directory_path_raises_error(self, tmp_path: Path) -> None:
         """Passing a directory path instead of a file should raise DataLoadError."""
         with pytest.raises(DataLoadError, match="not a file"):
-            load_deck_from_json("/tmp")
+            load_deck_from_json(str(tmp_path))
 
 
 class TestFlashcardModel:
