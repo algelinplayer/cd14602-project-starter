@@ -1,4 +1,7 @@
-# Core testing framework
+# Runtime: The application uses only the Python standard library.
+# No runtime dependencies required.
+
+# Testing
 pytest>=7.0.0
 pytest-cov>=4.0.0
 
@@ -9,17 +12,3 @@ isort>=5.10.0
 
 # Type checking
 mypy>=1.0.0
-
-# Documentation generation
-sphinx>=5.0.0
-sphinx-rtd-theme>=1.0.0
-
-# Development utilities
-pre-commit>=3.0.0
-bandit>=1.7.0  # Security linting
-safety>=2.0.0  # Security vulnerability scanning
-
-# Optional: For more advanced projects
-requests>=2.28.0  # HTTP requests
-click>=8.0.0      # CLI framework
-pydantic>=1.10.0  # Data validation
