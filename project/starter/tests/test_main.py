@@ -4,13 +4,34 @@ This module verifies the argument parsing and main function behavior,
 including error handling for invalid files and modes.
 """
 
-import sys
+import json
 from pathlib import Path
 from unittest.mock import patch
 
 import pytest
 
 from main import main, parse_arguments
+
+# Sample valid deck data for testing
+SAMPLE_DECK = {
+    "deck_name": "Test Deck",
+    "cards": [
+        {
+            "front": "What does API stand for?",
+            "back": "Application Programming Interface",
+        },
+        {"front": "What does HTTP stand for?", "back": "HyperText Transfer Protocol"},
+        {"front": "What does DNS stand for?", "back": "Domain Name System"},
+    ],
+}
+
+
+@pytest.fixture
+def valid_deck_file(tmp_path: Path) -> str:
+    """Create a temporary valid deck file and return its path as a string."""
+    deck_path = tmp_path / "flashcards.json"
+    deck_path.write_text(json.dumps(SAMPLE_DECK), encoding="utf-8")
+    return str(deck_path)
 
 
 class TestParseArguments:
@@ -55,43 +76,34 @@ class TestMainFunction:
         result = main(["nonexistent_file.json"])
         assert result == 1
 
-    def test_valid_file_with_mocked_input(self) -> None:
+    def test_valid_file_with_mocked_input(self, valid_deck_file: str) -> None:
         """A valid file should run the quiz (mocked input for non-interactive)."""
-        sample_path = str(Path(__file__).parent.parent / "data" / "flashcards.json")
-
-        # Mock input to provide answers and avoid blocking
         answers = iter(["answer"] * 20)
         with patch("builtins.input", side_effect=answers):
-            result = main([sample_path, "--mode", "sequential"])
+            result = main([valid_deck_file, "--mode", "sequential"])
 
         assert result == 0
 
-    def test_valid_file_random_mode(self) -> None:
+    def test_valid_file_random_mode(self, valid_deck_file: str) -> None:
         """Random mode should work with a valid file."""
-        sample_path = str(Path(__file__).parent.parent / "data" / "flashcards.json")
-
         answers = iter(["answer"] * 20)
         with patch("builtins.input", side_effect=answers):
-            result = main([sample_path, "--mode", "random"])
+            result = main([valid_deck_file, "--mode", "random"])
 
         assert result == 0
 
-    def test_valid_file_adaptive_mode(self) -> None:
+    def test_valid_file_adaptive_mode(self, valid_deck_file: str) -> None:
         """Adaptive mode should work with a valid file."""
-        sample_path = str(Path(__file__).parent.parent / "data" / "flashcards.json")
-
         # Provide enough answers for first pass + potential second pass
         answers = iter(["answer"] * 30)
         with patch("builtins.input", side_effect=answers):
-            result = main([sample_path, "--mode", "adaptive"])
+            result = main([valid_deck_file, "--mode", "adaptive"])
 
         assert result == 0
 
-    def test_keyboard_interrupt_handled(self) -> None:
+    def test_keyboard_interrupt_handled(self, valid_deck_file: str) -> None:
         """KeyboardInterrupt during quiz should be handled gracefully."""
-        sample_path = str(Path(__file__).parent.parent / "data" / "flashcards.json")
-
         with patch("builtins.input", side_effect=KeyboardInterrupt):
-            result = main([sample_path])
+            result = main([valid_deck_file])
 
         assert result == 0
