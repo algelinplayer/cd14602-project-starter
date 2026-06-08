@@ -1,33 +1,30 @@
 # AI-Assisted Development Project Report
 
-**Student Name:** [Your Name]
 **Project Title:** Flashcard Quizzer CLI Application
 **Date:** 2026-06-08
 
 ## Executive Summary
 
-The Flashcard Quizzer is a command-line application that enables users to study flashcard decks using three distinct quiz modes: Sequential, Random, and Adaptive. The application loads flashcard data from JSON files, presents questions to the user, evaluates answers case-insensitively, and provides detailed session statistics including accuracy percentage and a list of missed terms.
+The Flashcard Quizzer is a command-line application that enables users to study flashcard decks using three distinct quiz modes: Sequential, Random, and Adaptive. The application loads flashcard data from JSON files, presents questions, evaluates answers case-insensitively, and provides session statistics including accuracy percentage and missed terms.
 
-The project was developed using AI-assisted coding practices, following the principles taught in the Udacity Vibe Engineering with Python course. Every module was generated through carefully crafted prompts using the CREATE framework, then rigorously reviewed for correctness, adherence to PEP 8, proper type hints, and comprehensive error handling. The iterative development process resulted in a well-tested application with 85 unit tests achieving 94% code coverage.
-
-The collaboration with AI proved most valuable in generating boilerplate code, implementing design patterns correctly, and producing comprehensive test suites. However, the engineer's role remained critical in catching subtle bugs (such as random seed behavior after reset), ensuring proper integration between modules, and making architectural decisions about separation of concerns.
+The project was developed using AI-assisted coding practices following the Udacity Vibe Engineering course. Every module was generated through carefully crafted prompts, then reviewed for correctness, PEP 8 compliance, type hints, and error handling. The iterative process resulted in a well-tested application with 100 unit tests achieving 94% code coverage.
 
 ## Project Overview
 
 ### Problem Statement
 
-Students need an effective tool for self-study that goes beyond simple flashcard flipping. The application needed to support multiple study strategies, particularly an adaptive mode that helps users focus on material they find difficult, while maintaining a clean codebase that demonstrates professional software engineering practices.
+Students need an effective self-study tool that goes beyond simple flashcard flipping. The application supports multiple study strategies, particularly an adaptive mode that helps users focus on difficult material, while maintaining a clean codebase demonstrating professional software engineering practices.
 
 ### Solution Approach
 
-The solution employs a modular architecture with clear separation of concerns. The key design decisions were:
+The solution employs a modular architecture with clear separation of concerns:
 
-1. **Strategy Pattern** for quiz modes, allowing new modes to be added without modifying existing code.
-2. **Dependency Injection** for the quiz engine, enabling isolated unit testing through a mock UI.
-3. **Protocol-based abstraction** for the UI layer, decoupling presentation from business logic.
+1. **Strategy Pattern** for quiz modes, allowing new modes without modifying existing code.
+2. **Dependency Injection** for the quiz engine, enabling isolated unit testing.
+3. **Protocol-based abstraction** for the UI layer, decoupling presentation from logic.
 4. **Custom exceptions** with user-friendly messages instead of raw stack traces.
 
-The technology stack consists of Python 3.8+ with only standard library dependencies for the application itself, and pytest with pytest-cov for the test suite.
+The technology stack uses Python 3.10+ with only standard library dependencies for the application, and pytest with pytest-cov for testing.
 
 ### Final Features
 
@@ -48,97 +45,74 @@ The technology stack consists of Python 3.8+ with only standard library dependen
 
 ### Collaboration Workflow
 
-The development followed a structured workflow for each module:
-
-1. **Prompt Engineering**: Each module was specified using a detailed prompt following the CREATE framework, including context, requirements, examples, constraints, and expected output format.
-2. **Code Generation**: The AI generated the initial implementation based on the prompt.
-3. **Code Review**: Every generated module was reviewed against a checklist: PEP 8 compliance, type hints, docstrings, error handling, no phantom dependencies, and correct logic.
-4. **Testing**: A comprehensive test suite was generated and executed to verify behavior.
-5. **Refinement**: Bugs discovered during testing were fixed and documented in the AI edit log.
+Each module followed a structured workflow: (1) Prompt engineering using the CREATE framework, (2) Code generation, (3) Code review against a checklist (PEP 8, type hints, docstrings, error handling, no phantom dependencies), (4) Testing, and (5) Refinement of any bugs found.
 
 ### Most Valuable AI Interactions
 
 #### Example 1: Strategy Pattern Implementation
 
-**Context:** Implementing the Strategy Pattern for quiz modes required an abstract base class and three concrete strategies with different card selection algorithms.
-
-**AI Prompt:** A detailed specification of the QuizStrategy ABC interface and the behavior of each concrete strategy, including the adaptive two-pass algorithm.
-
-**AI Response:** A complete `quiz_modes.py` module with proper ABC inheritance, all three strategies, and a factory function.
-
-**Your Changes:** Fixed a subtle bug in `RandomStrategy.reset()` where the seed was not being re-applied before reshuffling, causing non-deterministic behavior.
-
-**Outcome:** A clean, extensible Strategy Pattern implementation that passes all 28 tests.
+**Context:** Implementing the Strategy Pattern for quiz modes required an ABC and three concrete strategies.
+**AI Prompt:** Detailed specification of the QuizStrategy interface and each strategy's behavior.
+**AI Response:** Complete `quiz_modes.py` with proper ABC inheritance, three strategies, and a factory function.
+**Your Changes:** Fixed a bug in `RandomStrategy.reset()` where the seed was not re-applied before reshuffling.
+**Outcome:** Clean Strategy Pattern passing all 28 tests.
 
 #### Example 2: Mock-Based Testing for Quiz Engine
 
-**Context:** The quiz engine needed to be tested without real terminal I/O, requiring a mock UI that could provide predetermined answers and record all method calls.
-
-**AI Prompt:** Specification for a MockUI class and comprehensive test scenarios covering all correct, all incorrect, mixed answers, and adaptive mode behavior.
-
-**AI Response:** A complete test file with 23 tests using a well-designed MockUI class.
-
-**Your Changes:** Fixed one test that provided answers in the wrong order for the adaptive strategy (which shuffles cards), requiring understanding of the seed-based shuffle order.
-
-**Outcome:** Full test coverage of the quiz engine logic without any dependency on terminal I/O.
+**Context:** The quiz engine needed testing without real terminal I/O.
+**AI Prompt:** Specification for a MockUI class and comprehensive test scenarios.
+**AI Response:** Complete test file with 23 tests using a MockUI class.
+**Your Changes:** Fixed one test that provided answers in the wrong order for the adaptive strategy's seeded shuffle.
+**Outcome:** Full test coverage of quiz engine logic without terminal dependency.
 
 #### Example 3: Data Validation with Custom Exceptions
 
-**Context:** The data loader needed to handle multiple failure modes gracefully without exposing raw Python exceptions to the user.
-
-**AI Prompt:** Detailed specification of the expected JSON schema, all possible error conditions, and the requirement for user-friendly error messages.
-
-**AI Response:** A comprehensive validation system with separate functions for deck structure and individual card validation.
-
-**Your Changes:** Added validation for empty/whitespace-only strings and PermissionError handling that were missing from the initial generation.
-
-**Outcome:** A robust data loading system that provides helpful, actionable error messages for every failure mode.
+**Context:** The data loader needed graceful handling of multiple failure modes.
+**AI Prompt:** Specification of the JSON schema, error conditions, and user-friendly messages.
+**AI Response:** Comprehensive validation with separate functions for deck structure and card validation.
+**Your Changes:** Added whitespace-only string validation and PermissionError handling.
+**Outcome:** Robust data loading with actionable error messages for every failure mode.
 
 ### Challenges with AI Collaboration
 
-The primary challenges encountered were:
+1. **Subtle state bugs**: AI-generated code had issues with mutable state (random seed not reapplied after reset), only surfacing during testing.
+2. **Test-data alignment**: AI sometimes assumed specific card orders without verifying against the actual shuffle for a given seed.
+3. **Over-engineering**: Initial prompts sometimes produced overly complex solutions; explicit constraints helped.
 
-1. **Subtle state bugs**: The AI generated code that appeared correct but had subtle issues with mutable state (e.g., the random seed not being reapplied after reset). These bugs only surfaced during testing.
-2. **Test-data alignment**: When testing randomized strategies, the AI sometimes assumed a specific card order without verifying it against the actual shuffle result for the given seed.
-3. **Over-engineering tendency**: Initial prompts sometimes resulted in overly complex solutions. Adding explicit constraints ("Do NOT use external dependencies") helped keep the code focused.
+## Technical Challenges and Solutions
+
+### Challenge 1: Deterministic Random Strategy Testing
+
+**Problem:** The RandomStrategy shuffles cards, making test assertions unpredictable.
+**Solution:** Added seed support to RandomStrategy and AdaptiveStrategy, allowing reproducible shuffles in tests.
+**AI Involvement:** AI generated the initial strategy; review and testing exposed the seed-reset issue.
+**Lessons Learned:** Randomized behavior needs deterministic test hooks via seed parameters.
+
+### Challenge 2: Self-Contained CLI Tests
+
+**Problem:** CLI integration tests initially depended on a project-level `data/flashcards.json` file, creating fragile coupling.
+**Solution:** Rewrote CLI tests to use pytest `tmp_path` fixtures that create their own valid deck data.
+**AI Involvement:** AI generated the initial tests with file-path dependencies; review identified the fragility.
+**Lessons Learned:** Tests should control their own fixtures to avoid packaging-related failures.
 
 ## Software Engineering Practices
 
 ### Code Quality Measures
 
+- [x] Code formatting with Black (all files pass `black --check .`)
+- [x] Linting with flake8 (zero violations at max-line-length=100)
 - [x] Type hints on all functions and methods
-- [x] Comprehensive docstrings (module, class, and function level)
+- [x] Comprehensive docstrings at module, class, and function levels
 - [x] Custom exception classes with descriptive messages
-- [x] Error handling that never exposes raw stack traces
-- [x] Consistent code formatting following PEP 8
 
 ### Testing Strategy
 
-The testing approach combined unit testing with integration testing:
-
-- **Unit tests** verify individual functions and classes in isolation (data validation, strategy logic, stats computation).
-- **Integration tests** verify the interaction between components (quiz engine with strategies, main function with all modules).
-- **Mock-based testing** enables testing the quiz engine without real terminal I/O.
-- **Test coverage**: 94% across the flashcard_quizzer package and main module.
+Unit tests verify individual functions in isolation; integration tests verify component interaction; mock-based testing enables quiz engine testing without I/O. Coverage: 94% across all application modules.
 
 ### Design Patterns Used
 
-- **Strategy Pattern** (`quiz_modes.py`): Encapsulates quiz mode algorithms behind a common interface, enabling runtime mode selection without conditional logic in the engine.
-- **Factory Pattern** (`create_strategy()` function): Provides a clean API for instantiating strategies by name, centralizing creation logic.
-- **Dependency Injection** (`QuizEngine` constructor): Accepts its dependencies (deck, strategy, UI) as constructor parameters, enabling flexible composition and testability.
-- **Protocol** (`UIProtocol`): Defines a structural typing contract for the UI layer, allowing any compatible object (including mocks) to serve as the UI.
-
-### Code Structure and Organization
-
-The code is organized into a single package (`flashcard_quizzer`) with five modules, each with a single responsibility:
-
-| Module | Responsibility |
-|--------|---------------|
-| `models.py` | Domain data structures (Flashcard, Deck) |
-| `data_loader.py` | File I/O and data validation |
-| `quiz_modes.py` | Card selection algorithms (Strategy Pattern) |
-| `quiz_engine.py` | Session orchestration and state management |
-| `ui.py` | User interaction (display and input) |
+- **Strategy Pattern** (`quiz_modes.py`): The primary design pattern. Encapsulates quiz mode algorithms behind a common interface, enabling runtime mode selection without conditional logic in the engine.
+- Supporting techniques: Factory function (`create_strategy()`), Dependency Injection (`QuizEngine` constructor), Protocol (`UIProtocol`).
 
 ## Code Quality Analysis
 
@@ -146,92 +120,66 @@ The code is organized into a single package (`flashcard_quizzer`) with five modu
 
 | Metric | Value |
 |--------|-------|
-| Application lines of code | 1,029 |
-| Test lines of code | 1,343 |
-| Total test count | 85 |
+| Total test count | 100 |
 | Test coverage | 94% |
-| Classes | 11 |
-| Functions/methods | 72 |
-| External dependencies | 0 (application), 2 (testing: pytest, pytest-cov) |
+| Linting (flake8) | 0 violations |
+| Formatting (black) | All files pass |
+| External runtime dependencies | 0 |
 
 ### Self-Assessment
 
-- **Code Readability:** 5 — Consistent naming, comprehensive docstrings, and clear module separation make the code easy to follow.
-- **Code Maintainability:** 5 — The Strategy Pattern and dependency injection make it trivial to add new quiz modes or swap UI implementations.
-- **Test Quality:** 5 — 85 tests covering unit, integration, and edge cases with a MockUI for isolated testing.
-- **Documentation:** 5 — Every module, class, and function has docstrings. AI interactions are fully documented.
+- **Code Readability:** 5 — Consistent naming, comprehensive docstrings, clear module separation.
+- **Code Maintainability:** 5 — Strategy Pattern and DI make adding new modes trivial.
+- **Test Quality:** 5 — 100 tests covering unit, integration, and edge cases with self-contained fixtures.
+- **Documentation:** 5 — Every module, class, and function has docstrings; AI interactions fully documented.
 
 ## Learning Outcomes
 
 ### Technical Skills Developed
 
-- Implementing the Strategy Pattern in Python using ABC and concrete subclasses.
-- Using Python's `typing.Protocol` for structural subtyping and dependency inversion.
+- Implementing the Strategy Pattern using ABC and concrete subclasses.
+- Using `typing.Protocol` for structural subtyping and dependency inversion.
 - Writing testable code through dependency injection and mock objects.
 - Building CLI applications with argparse.
 
 ### AI Collaboration Skills
 
 - Crafting precise, constraint-rich prompts that minimize ambiguity.
-- Reviewing AI output critically, especially for subtle state management bugs.
+- Reviewing AI output critically for subtle state management bugs.
 - Using seeds and deterministic parameters to make randomized code testable.
-- Documenting the AI collaboration process for reproducibility.
-
-### Software Engineering Insights
-
-- Design patterns are not just theoretical — they directly improve testability and extensibility.
-- Separation of concerns (UI from logic) is essential for automated testing.
-- Custom exceptions with helpful messages dramatically improve the user experience.
-- Test-driven iteration catches bugs that code review alone might miss.
 
 ## Reflection
 
 ### What Worked Well
 
-The CREATE framework for prompting produced consistently high-quality initial code. The iterative approach (generate, review, test, fix) caught all bugs before they could reach production. The Strategy Pattern proved its value when the adaptive mode was added — no changes to the engine were needed.
+The CREATE framework for prompting produced consistently high-quality initial code. The iterative approach (generate, review, test, fix) caught all bugs before production. The Strategy Pattern proved its value when adding the adaptive mode — no engine changes were needed.
 
 ### What Could Be Improved
 
-- The adaptive strategy could be more sophisticated (e.g., spaced repetition with decay).
-- The UI could support color output for terminals that support ANSI codes.
+- The adaptive strategy could use spaced repetition (SM-2) for better learning outcomes.
 - A configuration file could allow users to customize quiz behavior.
-
-### Future Enhancements
-
-- Add a spaced repetition algorithm (SM-2) as a fourth strategy.
-- Support multiple file formats (CSV, YAML) in addition to JSON.
-- Add a "hint" feature that reveals partial answers.
-- Implement persistent progress tracking across sessions.
-- Add a web-based UI as an alternative to the terminal.
+- Tests could include property-based testing for stronger validation guarantees.
 
 ## Conclusion
 
-This project demonstrated that AI-assisted development is most effective when the engineer maintains a strong understanding of software architecture and testing practices. The AI excels at generating well-structured code from precise specifications, but the engineer's role in reviewing, testing, and fixing subtle bugs remains irreplaceable. The combination of the CREATE framework for prompting, rigorous code review, and comprehensive testing produced a production-quality application in a fraction of the time that manual coding alone would require.
+This project demonstrated that AI-assisted development is most effective when the engineer maintains strong understanding of software architecture and testing. AI excels at generating well-structured code from precise specifications, but the engineer's role in reviewing, testing, and fixing subtle bugs remains irreplaceable. The combination of structured prompting, rigorous review, and comprehensive testing produced a production-quality application efficiently.
 
 ## Appendices
 
 ### Appendix A: AI Interaction Log
 
-See `ai_edit_log.md` for the complete log of 8 AI interactions, including prompts, reviews, and decisions.
+See `ai_edit_log.md` for the complete log of 10 AI interactions.
 
-### Appendix B: Code Statistics
+### Appendix B: Final Verification
 
 ```
-Test Results: 85 passed
-Coverage:     94% (flashcard_quizzer + main)
+$ black --check .
+All done! 17 files would be left unchanged.
 
-Per-module coverage:
-  models.py        100%
-  data_loader.py    96%
-  quiz_modes.py     94%
-  quiz_engine.py   100%
-  ui.py             92%
-  main.py           79%
+$ flake8 . --max-line-length=100
+(no output — zero violations)
+
+$ pytest tests/ --cov=flashcard_quizzer --cov=main --cov=utils -q
+100 passed
+TOTAL coverage: 94%
 ```
-
-### Appendix C: Additional Resources
-
-- Udacity Vibe Engineering with Python Course (nd770)
-- "Design Patterns: Elements of Reusable Object-Oriented Software" (Gang of Four)
-- Python `typing.Protocol` documentation (PEP 544)
-- pytest documentation (https://docs.pytest.org/)
