@@ -76,7 +76,7 @@ class TerminalUI:
         """
         print()
         print(self.HEADER_SEPARATOR)
-        print(f"  FLASHCARD QUIZZER")
+        print("  FLASHCARD QUIZZER")
         print(self.HEADER_SEPARATOR)
         print(f"  Deck: {deck_name}")
         print(f"  Cards: {card_count}")

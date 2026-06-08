@@ -68,9 +68,7 @@ class QuizEngine:
         stats: The session statistics tracker.
     """
 
-    def __init__(
-        self, deck: Deck, strategy: QuizStrategy, ui: UIProtocol
-    ) -> None:
+    def __init__(self, deck: Deck, strategy: QuizStrategy, ui: UIProtocol) -> None:
         """Initialize the quiz engine with its dependencies.
 
         Args:

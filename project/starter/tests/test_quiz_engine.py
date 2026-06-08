@@ -6,9 +6,6 @@ correct/incorrect tracking, and integration with different strategies.
 """
 
 from typing import List
-from unittest.mock import MagicMock, call, patch
-
-import pytest
 
 from flashcard_quizzer.models import Deck, Flashcard
 from flashcard_quizzer.quiz_engine import QuizEngine, SessionStats

@@ -12,8 +12,7 @@ __pycache__/
 .coverage
 htmlcov/
 
-# Data files
-data/
+# Data files (sample data is tracked; large/generated data should be excluded manually)
 
 # IDE
 .vscode/

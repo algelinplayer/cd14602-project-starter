@@ -6,7 +6,6 @@ It provides graceful error handling for missing files and malformed data.
 """
 
 import json
-import sys
 from pathlib import Path
 from typing import List
 
@@ -85,19 +84,13 @@ def validate_deck_structure(data: dict) -> None:
         )
 
     if "deck_name" not in data:
-        raise DataLoadError(
-            "Missing required field 'deck_name' in the JSON file."
-        )
+        raise DataLoadError("Missing required field 'deck_name' in the JSON file.")
 
     if "cards" not in data:
-        raise DataLoadError(
-            "Missing required field 'cards' in the JSON file."
-        )
+        raise DataLoadError("Missing required field 'cards' in the JSON file.")
 
     if not isinstance(data["cards"], list):
-        raise DataLoadError(
-            "The 'cards' field must be a list of flashcard objects."
-        )
+        raise DataLoadError("The 'cards' field must be a list of flashcard objects.")
 
     if len(data["cards"]) == 0:
         raise DataLoadError(
@@ -154,8 +147,6 @@ def load_deck_from_json(file_path: str) -> Deck:
     cards: List[Flashcard] = []
     for index, card_data in enumerate(data["cards"]):
         validate_card_data(card_data, index)
-        cards.append(
-            Flashcard(front=card_data["front"], back=card_data["back"])
-        )
+        cards.append(Flashcard(front=card_data["front"], back=card_data["back"]))
 
     return Deck(name=data["deck_name"], cards=cards)

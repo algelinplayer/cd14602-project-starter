@@ -187,7 +187,9 @@ class TestLoadDeckFromJson:
         }
         path = self._create_temp_json(data)
         try:
-            with pytest.raises(DataLoadError, match="missing the required 'back' field"):
+            with pytest.raises(
+                DataLoadError, match="missing the required 'back' field"
+            ):
                 load_deck_from_json(path)
         finally:
             os.unlink(path)
