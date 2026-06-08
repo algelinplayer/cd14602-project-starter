@@ -188,4 +188,4 @@ starter/
 
 ## License
 
-This project is part of the Udacity AI-Powered Software Engineer Nanodegree.
+This project is part of the Udacity AI-Powered Software Engineer Nanodegree. [License](../../LICENSE.txt)
