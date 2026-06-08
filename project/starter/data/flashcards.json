@@ -1,0 +1,45 @@
+{
+    "deck_name": "Server Acronyms",
+    "cards": [
+        {
+            "front": "What does API stand for?",
+            "back": "Application Programming Interface"
+        },
+        {
+            "front": "What does REST stand for?",
+            "back": "Representational State Transfer"
+        },
+        {
+            "front": "What does HTTP stand for?",
+            "back": "HyperText Transfer Protocol"
+        },
+        {
+            "front": "What does DNS stand for?",
+            "back": "Domain Name System"
+        },
+        {
+            "front": "What does TCP stand for?",
+            "back": "Transmission Control Protocol"
+        },
+        {
+            "front": "What does SSH stand for?",
+            "back": "Secure Shell"
+        },
+        {
+            "front": "What does SQL stand for?",
+            "back": "Structured Query Language"
+        },
+        {
+            "front": "What does JSON stand for?",
+            "back": "JavaScript Object Notation"
+        },
+        {
+            "front": "What does CLI stand for?",
+            "back": "Command Line Interface"
+        },
+        {
+            "front": "What does SDK stand for?",
+            "back": "Software Development Kit"
+        }
+    ]
+}
