@@ -98,7 +98,7 @@ flashcard_quizzer/
 
 ## Testing
 
-The project includes a comprehensive test suite with **85 tests** achieving **94% code coverage**.
+The project includes a comprehensive test suite with **100 tests** achieving **94% code coverage**.
 
 ```bash
 # Run all tests
@@ -122,6 +122,8 @@ pytest tests/test_quiz_modes.py -v
 | `test_quiz_modes.py` | 28 | All strategy behaviors and factory |
 | `test_quiz_engine.py` | 23 | Quiz loop, stats, integration with strategies |
 | `test_main.py` | 11 | CLI argument parsing and main function |
+| `test_file_handler.py` | 7 | File I/O utility tests |
+| `test_task_manager.py` | 8 | Task manager CRUD tests |
 
 ## AI Collaboration
 
@@ -154,10 +156,13 @@ starter/
 │   ├── test_data_loader.py     # Data loading tests
 │   ├── test_quiz_modes.py      # Strategy pattern tests
 │   ├── test_quiz_engine.py     # Quiz engine tests (with MockUI)
-│   └── test_main.py            # CLI integration tests
+│   ├── test_main.py            # CLI integration tests
+│   ├── test_file_handler.py    # File handler utility tests
+│   └── test_task_manager.py    # Task manager utility tests
 ├── data/                       # Sample flashcard data
 │   └── flashcards.json
 ├── docs/                       # Project documentation
+│   ├── final_report.md
 │   ├── design_patterns.md
 │   ├── project_rubric.md
 │   └── report_template.md
@@ -174,6 +179,13 @@ starter/
 - [pytest-cov](https://pytest-cov.readthedocs.io/) — Coverage reporting
 - [argparse](https://docs.python.org/3/library/argparse.html) — CLI argument parsing (stdlib)
 
+## Dependencies
+
+| Category | Packages |
+|----------|----------|
+| **Runtime** | Python standard library only (no external packages) |
+| **Development/Testing** | pytest, pytest-cov, black, flake8, isort, mypy |
+
 ## License
 
-[License](LICENSE.txt)
+This project is part of the Udacity AI-Powered Software Engineer Nanodegree.
