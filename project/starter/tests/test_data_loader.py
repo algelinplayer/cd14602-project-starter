@@ -203,8 +203,9 @@ class TestLoadDeckFromJson:
 
     def test_directory_path_raises_error(self) -> None:
         """Passing a directory path instead of a file should raise DataLoadError."""
-        with pytest.raises(DataLoadError, match="not a file"):
-            load_deck_from_json("/tmp")
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with pytest.raises(DataLoadError, match="not a file"):
+                load_deck_from_json(tmp_dir)
 
 
 class TestFlashcardModel:
