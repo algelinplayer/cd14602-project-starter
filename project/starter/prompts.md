@@ -68,3 +68,83 @@ Requirements:
 - Use descriptive test names
 - Include type hints on test methods
 ```
+
+---
+
+## Prompt 4: Strategy Pattern for Quiz Modes
+
+```
+Implement the Strategy Pattern for quiz modes in a `quiz_modes.py` module.
+
+Architecture:
+1. Abstract Base Class `QuizStrategy` with methods:
+   - initialize(cards: List[Flashcard]) -> None
+   - select_next_card() -> Optional[Flashcard]
+   - record_result(card: Flashcard, correct: bool) -> None
+   - has_more_cards() -> bool
+   - reset() -> None
+
+2. Concrete Strategies:
+   - SequentialStrategy: presents cards in original order (index 0 to N-1)
+   - RandomStrategy: shuffles deck, presents each card once. Accept optional 
+     `seed` parameter for reproducible testing.
+   - AdaptiveStrategy: Two passes. First pass shows all cards (shuffled). 
+     Second pass repeats only cards answered incorrectly. Accept optional `seed`.
+
+3. Factory function `create_strategy(mode: str, seed: Optional[int]) -> QuizStrategy`
+   that creates the appropriate strategy by name (case-insensitive).
+
+Requirements:
+- Use Python ABC for the abstract base class
+- All functions must have type hints and comprehensive docstrings
+- Follow PEP 8 style guidelines
+- Do NOT use external dependencies (only standard library: abc, random)
+- Raise ValueError for unknown mode names with helpful message
+```
+
+---
+
+## Prompt 5: Unit Tests for Quiz Modes
+
+```
+Write a comprehensive pytest test suite for the quiz_modes module.
+
+Test classes needed:
+1. TestSequentialStrategy:
+   - Cards presented in order
+   - Returns None when exhausted
+   - Reset restarts from beginning
+   - record_result is no-op
+   - Empty card list handled
+   - Does not mutate original list
+
+2. TestRandomStrategy:
+   - All cards presented exactly once
+   - Order differs from sequential
+   - Reproducible with same seed
+   - Returns None when exhausted
+   - Reset allows full replay
+   - record_result is no-op
+
+3. TestAdaptiveStrategy:
+   - First pass presents all cards
+   - No second pass if all correct
+   - Missed cards repeated in second pass
+   - Second pass only contains missed cards
+   - Total presentations = N + missed count
+   - Reset clears missed cards
+   - has_more_cards during transition
+
+4. TestCreateStrategy:
+   - Creates each strategy type
+   - Case insensitive
+   - Strips whitespace
+   - Invalid mode raises ValueError
+   - Seed parameter works
+   - All strategies implement QuizStrategy interface
+
+Requirements:
+- Use pytest with classes
+- Use seed parameter for deterministic testing
+- Descriptive test names with type hints
+```

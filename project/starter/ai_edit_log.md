@@ -26,6 +26,8 @@ The AI generated `models.py` with both dataclasses. The initial output was clean
 
 ## Interaction 2: Data Loader with Validation
 
+**Date:** 2026-06-08
+
 **Prompt Used:**
 > "Create a `data_loader.py` module that reads flashcard data from a JSON file. The expected schema is: `{\"deck_name\": \"string\", \"cards\": [{\"front\": \"string\", \"back\": \"string\"}, ...]}`. The module must: (1) validate the JSON structure, (2) raise a custom `DataLoadError` exception with helpful messages if the file is missing, malformed, or has invalid schema, (3) never show raw stack traces to the user. Include separate validation functions for the deck structure and individual cards. Use Python type hints and docstrings."
 
@@ -49,6 +51,8 @@ The AI generated a comprehensive `data_loader.py` with `validate_card_data`, `va
 
 ## Interaction 3: Unit Tests for Data Loading
 
+**Date:** 2026-06-08
+
 **Prompt Used:**
 > "Write a comprehensive pytest test suite for the `data_loader.py` module. Test valid loading, file not found, invalid JSON, missing schema fields, invalid card entries, and edge cases like empty strings and non-dict cards. Use temporary files for test fixtures. Organize tests into classes by function being tested."
 
@@ -63,3 +67,48 @@ The AI generated `test_data_loader.py` with four test classes covering all valid
 - Properly cleans up temporary files with `try/finally` blocks.
 
 **Decision:** ACCEPTED without modification.
+
+---
+
+## Interaction 4: Strategy Pattern for Quiz Modes
+
+**Date:** 2026-06-08
+
+**Prompt Used:**
+> "Implement the Strategy Pattern for quiz modes in a `quiz_modes.py` module. Create an abstract base class `QuizStrategy` with methods: `initialize(cards)`, `select_next_card()`, `record_result(card, correct)`, `has_more_cards()`, and `reset()`. Then implement three concrete strategies: (1) `SequentialStrategy` - presents cards in order, (2) `RandomStrategy` - shuffles the deck (accept optional seed for testing), (3) `AdaptiveStrategy` - first pass shows all cards, second pass repeats only missed cards. Also create a `create_strategy(mode, seed)` factory function. Use type hints and docstrings."
+
+**AI Response Summary:**
+The AI generated a comprehensive `quiz_modes.py` with the abstract base class, three concrete strategies, and a factory function.
+
+**Review Findings:**
+- Strategy Pattern correctly implemented with proper ABC inheritance.
+- All strategies implement the full interface.
+- `RandomStrategy` accepts an optional seed for deterministic testing.
+- `AdaptiveStrategy` correctly tracks missed cards and provides a second pass.
+- Factory function handles case-insensitive mode names and raises `ValueError` for unknown modes.
+
+**Issues Found and Fixed:**
+- The `RandomStrategy.reset()` method had a subtle bug: it was reshuffling from the already-shuffled state, causing non-deterministic behavior even with a seed after reset. Fixed by ensuring the seed is re-applied before shuffling.
+- A test (`test_reset_reshuffles`) was making an incorrect assumption about deterministic replay. Rewrote it as `test_reset_allows_full_replay` to verify the correct behavior (all cards available again after reset).
+
+**Decision:** ACCEPTED after fixing the reset/seed interaction bug.
+
+---
+
+## Interaction 5: Unit Tests for Quiz Modes
+
+**Date:** 2026-06-08
+
+**Prompt Used:**
+> "Write a comprehensive pytest test suite for the quiz_modes module. Test all three strategies (Sequential, Random, Adaptive) and the factory function. For Sequential: test ordering, exhaustion, reset, empty list. For Random: test all cards presented once, different order from sequential, reproducibility with seed, exhaustion. For Adaptive: test first pass presents all cards, no second pass if all correct, missed cards repeated, total presentations count. For the factory: test all valid modes, case insensitivity, invalid mode error."
+
+**AI Response Summary:**
+The AI generated `test_quiz_modes.py` with four test classes and 28 test methods.
+
+**Review Findings:**
+- Comprehensive coverage of all strategy behaviors.
+- Uses seed parameter for deterministic testing of random strategies.
+- Tests both happy paths and edge cases (empty lists, exhaustion).
+- Well-organized with descriptive test names.
+
+**Decision:** ACCEPTED after one test fix (described above in Interaction 4).
