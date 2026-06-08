@@ -177,3 +177,44 @@ The AI generated `test_quiz_engine.py` with a MockUI class and 23 test methods a
 - One test (`test_no_repeat_if_all_correct`) provided answers in the wrong order for the AdaptiveStrategy with seed=42. The adaptive mode shuffles cards, so with seed=42 the order is Q2, Q1 (not Q1, Q2). Fixed by providing answers matching the shuffled order.
 
 **Decision:** ACCEPTED after fixing the answer order in one adaptive test.
+
+---
+
+## Interaction 9: CLI Entry Point with argparse
+
+**Date:** 2026-06-08
+
+**Prompt Used:**
+> "Rewrite `main.py` as the CLI entry point for the Flashcard Quizzer. Use argparse with a required positional `file` argument and an optional `--mode` argument (choices: sequential, random, adaptive; default: sequential). The `main()` function should: load the deck, create the strategy, initialize TerminalUI and QuizEngine, run the quiz, and handle errors gracefully. Accept an optional `args` parameter for testing. Return exit codes (0 success, 1 error). Handle KeyboardInterrupt."
+
+**AI Response Summary:**
+The AI generated a clean `main.py` with `parse_arguments()` and `main()` functions.
+
+**Review Findings:**
+- argparse correctly configured with choices validation.
+- Error handling wraps DataLoadError and ValueError with user-friendly messages.
+- KeyboardInterrupt handled gracefully with a goodbye message.
+- The `args` parameter enables testing without mocking sys.argv.
+- Clean separation between argument parsing and application logic.
+
+**Decision:** ACCEPTED without modification.
+
+---
+
+## Interaction 10: CLI Integration Tests
+
+**Date:** 2026-06-08
+
+**Prompt Used:**
+> "Write pytest tests for main.py. Test argument parsing (required file, default mode, all modes, invalid mode rejection) and the main function (nonexistent file returns 1, valid file with mocked input returns 0 for all modes, KeyboardInterrupt handled gracefully)."
+
+**AI Response Summary:**
+The AI generated `test_main.py` with 11 tests across two classes.
+
+**Review Findings:**
+- Argument parsing tests correctly verify argparse behavior.
+- Main function tests use `unittest.mock.patch` on `builtins.input` to avoid blocking.
+- KeyboardInterrupt test verifies graceful exit with code 0.
+- Uses `Path` for cross-platform file path construction.
+
+**Decision:** ACCEPTED without modification.

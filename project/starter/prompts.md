@@ -225,3 +225,60 @@ Requirements:
 - Account for shuffled order when testing with AdaptiveStrategy/RandomStrategy
 - Descriptive test names with type hints
 ```
+
+---
+
+## Prompt 9: CLI Entry Point with argparse
+
+```
+Rewrite `main.py` as the CLI entry point for the Flashcard Quizzer application.
+
+Requirements:
+1. Use argparse with:
+   - Required positional argument: `file` (path to JSON flashcard data)
+   - Optional argument: `--mode` (choices: sequential, random, adaptive; default: sequential)
+
+2. `main(args=None)` function that:
+   - Parses arguments (accepts optional args list for testing)
+   - Loads the deck using load_deck_from_json
+   - Creates the strategy using create_strategy
+   - Initializes TerminalUI and QuizEngine
+   - Runs the quiz
+   - Returns exit codes: 0 for success, 1 for errors
+
+3. Error handling:
+   - Catch DataLoadError and display user-friendly message to stderr
+   - Catch ValueError from create_strategy
+   - Handle KeyboardInterrupt gracefully
+
+4. Include module docstring with usage examples
+5. All functions must have type hints and docstrings
+```
+
+---
+
+## Prompt 10: CLI Integration Tests
+
+```
+Write pytest tests for main.py.
+
+Test classes needed:
+1. TestParseArguments:
+   - File argument is required
+   - File argument parsed correctly
+   - Default mode is sequential
+   - All modes parsed correctly (random, adaptive)
+   - Invalid mode rejected (SystemExit)
+
+2. TestMainFunction:
+   - Nonexistent file returns exit code 1
+   - Valid file with mocked input returns 0 (sequential mode)
+   - Valid file with mocked input returns 0 (random mode)
+   - Valid file with mocked input returns 0 (adaptive mode)
+   - KeyboardInterrupt handled gracefully (returns 0)
+
+Requirements:
+- Use unittest.mock.patch on builtins.input to avoid blocking
+- Use Path for cross-platform file path construction
+- Provide enough mock answers for all cards including adaptive second pass
+```
